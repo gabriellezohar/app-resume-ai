@@ -27,6 +27,7 @@
 ## API Endpoints
 - **GET `/api/ping`** — Health check → returns `{ ok: true, time }`  
 - **POST `/api/generate`** — Creates an AI-enhanced resume JSON from the provided input
+
 Example request:
 curl -X POST https://app-resume-ai.onrender.com/api/generate \
   -H "Content-Type: application/json" \

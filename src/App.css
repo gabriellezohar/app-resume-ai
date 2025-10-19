@@ -1,38 +1,308 @@
-.App {
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  font-family: "Montserrat", sans-serif;
+
+}
+.container{
+  padding : 10px 50px;
+  max-width: 100%;
+}
+.container h1{
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.tabContent {
+  background: transparent;
+  padding: 4px 10px;
+  min-height: 40px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.form {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form-create{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+.personal-details{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap:7px;
+  row-gap: 8px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding:10px;
+  border-radius: 9px;
+}
+.form-section{
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding:10px;
+  border-radius: 9px;
   display: flex;
   flex-direction: column;
+}
+.personal-details .fieldsetTitle {
+  width: 100%;
+}
+.in {
+  width: 17.9%;
+  font-family: "Montserrat", sans-serif;
+
+}
+
+.personal-details textarea{
+  width: 100%;
+  font-family: "Montserrat", sans-serif;
+
+}
+.form input,
+.form textarea,
+.form select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.form button {
+  padding: 10px 14px;
+  background: #F37A48;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  transition: all 0.5s ease-out allow-discrete;
+  transition: 200ms linear 50ms;
+}
+.form button:hover{
+  color:#F37A48;
+  background-color: white;
+}
+
+.output {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+}
+.outputBar {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 8px;
+}
+.resultPre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.fieldsetTitle {
+  font-weight: 600;
+  margin: 10px 0 10px 0;
+  color:#323232;
+}
+.gridRow-special{
+  display: flex;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+.gridRow-special input{
+  width:50%;
+  font-family: "Montserrat", sans-serif;
+
+}
+.gridRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Role | Company | Dates | Remove */
+  row-gap: 8px;
+  column-gap: 10px;
+  align-items: start;
+  margin-bottom: 8px;
+}
+.gridRow input, .gridRow select{
+  font-family: "Montserrat", sans-serif;
+}
+.gridRow textarea {
+  grid-column: 1 / -1; /* שיפרוס לרוחב כל השורה */
+  font-family: "Montserrat", sans-serif;
+}
+.gridRow button {
+  justify-self: start;
+  font-family: "Montserrat", sans-serif;
+}
+.btn-add-row{
+  background-color: white !important; 
+  color:#00A86B !important;
+  text-align:left;
+  font-weight: bold;
+}
+.remove-btn{
+  background-color: white !important; 
+  color:rgb(165, 2, 2) !important;
+  text-align:left;
+  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+.add-file-input{
+  font-family: "Montserrat", sans-serif;
+
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.export-pdf{
+  padding: 10px 14px;
+  border: 2px solid #F37A48;
+  color: black;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: bold;
+  background-color: white;
+  transition: all 0.5s ease-out allow-discrete;
+  transition: 200ms linear 50ms;
+}
+.export-pdf:hover{
+  color:white;
+  background-color: #F37A48;
+}
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid #ddd;
+  border-top-color: #555;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin-inline-start: 8px;
+  vertical-align: -2px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media print {
+  .tabs, .form, .outputBar { display: none; }
+  body { background: #fff; }
+  .output { border: none; }
+
+  /* הסתרה מוחלטת של כל העמוד */
+  body * {
+    visibility: hidden !important;
   }
-  to {
-    transform: rotate(360deg);
+
+  /* מציגים רק את אזור הקו״ח */
+  .print-area, .print-area * {
+    visibility: visible !important;
+  }
+
+  /* ממקמים את אזור הקו״ח בראש הדף המודפס */
+  .print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;        /* רוחב A4 */
+    min-height: 297mm;   /* גובה A4 */
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  /* אופציונלי: שליטה בשולי הדף המודפס */
+  @page {
+    size: A4;
+    margin: 0;          /* ביטול שוליים של המדפסת (אנחנו מנהלים padding) */
   }
 }
+
+
+/* Resume preview */
+.resume {
+  width: 210mm; 
+  min-height: 297mm;
+  margin: 0 auto; 
+  background: #fff;
+  border: 1px solid #eee;
+  display: flex;
+  font-family: "Montserrat", sans-serif;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  row-gap: 10px;
+
+}
+.resume-header { 
+  margin-top: 0;
+  background-color: #EBEBEB;
+  padding: 15px;
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 30%;
+}
+.resume-contact{
+  text-align: right;
+  color:black; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 8px;
+  font-size: 12px; 
+  margin-top: 6px; 
+  border-left: 1px solid grey;
+  padding-left:10px;
+
+}
+.icon-info-row{
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+.icon-info-row svg{
+  width: 20px;
+  height: 20px;
+}
+.resume-header h2 { 
+  text-align: left;
+  font-size: 40px; 
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+  color: black;
+}
+.resume-sub { 
+  color: #666; margin-top: 2px; 
+}
+.left-section{
+  width: 60%;
+}
+.right-section{
+  width: 40%;
+}
+section { 
+  padding:15px;
+  color: #454B42;
+  font-size: 13px;
+}
+section h3 {
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: #464A4E;
+}
+
+.xp-item { margin-bottom: 10px; }
+.xp-head {
+  display: flex;
+  gap: 8px; 
+  align-items: baseline; 
+  flex-wrap: wrap;
+}
+.xp-head-name{
+  width: 100%;
+}
+.xp-dates { color: #666; font-size: 13px; }

@@ -14,19 +14,16 @@ app.use((req, res, next) => {
   next();
 });
 
-// ראוט בדיקה: מחזיר JSON פשוט
 app.get('/api/ping', (req, res) => {
   res.json({ ok: true, time: new Date().toISOString() });
 });
 
-// POST /api/generate  — שלב ראשון: מחזיר JSON "מדוגם" (ללא AI)
 app.post('/api/generate', async (req, res) => {
   const { mode, payload } = req.body || {};
   if (!mode || !payload) {
     return res.status(400).json({ error: 'Missing mode or payload' });
   }
 
-  // נשלוף שדות מה-payload עם ברירות מחדל
   const {
     fullName = '',
     role = '',
@@ -43,14 +40,12 @@ app.post('/api/generate', async (req, res) => {
     volunteers = []
   } = payload;
 
-  // "ניקוי" מאוד בסיסי (כדי לא להחזיר שורות ריקות/רווחים)
   const clean = s => (typeof s === 'string' ? s.trim() : '');
   const part = s => (s && s.trim()) ? s.trim() : "";
   const toArr = a => Array.isArray(a) ? a : [];
 
   if (mode === 'create') {
   try {
-    // 1) SCHEMA — שימי לב: education כולל גם bullets
     const SCHEMA = `
     Return ONLY valid JSON with this exact shape:
     {
@@ -65,11 +60,7 @@ app.post('/api/generate', async (req, res) => {
     }
     `;
 
-    // 2) נרכיב “טקסט חומר גלם” מהשדות שהגיעו בפיילוד (בלי להסתמך על מבנה הישן)
     const toLines = (arr) => Array.isArray(arr) ? arr : [];
-    // const expLines = toLines(experiences).map((e, i) =>
-    //   `- ${clean(e.role)} @ ${clean(e.company)} (${clean(e.dates)})\n${clean(e.details || '')}`
-    // ).join('\n');
     const expLines = toArr(experiences).map(e => {
       const headParts = ["- " + part(e.role)];
       if (part(e.company)) headParts.push("• " + part(e.company));
@@ -79,9 +70,6 @@ app.post('/api/generate', async (req, res) => {
       return details ? `${head}\n${details}` : head;
     }).join("\n");
 
-    // const eduLines = toLines(educations).map((ed) =>
-    //   `- ${clean(ed.degree)} @ ${clean(ed.institution)} (${clean(ed.year)})\n${clean(ed.details || '')}`
-    // ).join('\n');
     const eduLines = toArr(educations).map(ed => {
       const headParts = ["- " + part(ed.degree)];
       if (part(ed.institution)) headParts.push("• " + part(ed.institution));
@@ -98,20 +86,6 @@ app.post('/api/generate', async (req, res) => {
 
     const skillsLine = toLines(skills).map(clean).filter(Boolean).join(', ');
     const langsLine  = toLines(languages).map(clean).filter(Boolean).join(', ');
-    
-    // const volLines = toLines(volunteers).map(v => {
-    //   const role = clean(v.role);
-    //   const org  = clean(v.organization);
-    //   const dates = clean(v.dates);
-    //   const details = clean(v.details || '');
-
-    //   const headParts = [`- ${role}`];
-    //   if (org)   headParts.push(`@ ${org}`);
-    //   if (dates) headParts.push(`(${dates})`);
-    //   const head = headParts.join(' ');
-
-    //   return details ? `${head}\n${details}` : head;
-    // }).join('\n');
 
     const volLines = toArr(volunteers).map(v => {
       const headParts = ["- " + part(v.role)];
@@ -122,7 +96,6 @@ app.post('/api/generate', async (req, res) => {
       return details ? `${head}\n${details}` : head;
     }).join("\n");
 
-    // 3) בניית ההודעות למודל
     const messages = [
       {
         role: 'system',
@@ -246,86 +219,6 @@ app.post('/api/generate', async (req, res) => {
   }
 }
 });
-
-// POST /api/improve-pdf  — מקבל PDF, מחלץ טקסט, מחזיר JSON לתצוגה
-// app.post('/api/improve-pdf', upload.single('file'), async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ error: 'No file uploaded' });
-//     }
-//     // בדיקת סוג קובץ בסיסית
-//     if (req.file.mimetype !== 'application/pdf') {
-//       return res.status(400).json({ error: 'Only PDF is supported' });
-//     }
-
-//     // חילוץ טקסט
-//     const data = await pdfParse(req.file.buffer);
-//     const raw = (data.text || '').trim();
-    
-//     if (!raw) {
-//         return res.status(400).json({ error: 'Could not extract text from PDF. Try a different file or a text-based export.' });
-//     }
-
-//     const SCHEMA = `
-//     Return ONLY valid JSON with this exact shape:
-
-//     {
-//     "header": { "name": string, "title": string, "email": string, "phone": string, "location": string },
-//     "summary": string,
-//     "experience": [ { "role": string, "company": string, "dates": string, "bullets": string[] } ],
-//     "skills": string[],
-//     "education": [ { "degree": string, "institution": string, "year": string, "bullets": string[] } ],
-//     "languages": string[],
-//     "courses": [ { "name": string, "issuer": string, "year": string } ]
-//     }
-//     `;
-
-//     const messages = [
-//     { role: 'system', content: 'You are a resume editor. Return ONLY JSON. No explanations, no code fences.' },
-//     { role: 'user', content:
-//     `Improve and restructure the following resume content into the target JSON schema.
-//     Keep meaning, fix grammar, be concise, and create action-oriented bullets (<= 20 words) with quantified impact when possible.
-//     Do NOT invent companies or dates. Fill missing non-critical fields with "" (empty string), not null.
-
-//     RAW TEXT:
-//     """
-//     ${raw.slice(0, 8000)}
-//     """
-
-//     Rules:
-//     - Prefer precise, ATS-friendly phrasing.
-//     - Keep consistent tense: present for current role, past for former roles.
-//     - ${SCHEMA}`
-//     }
-//     ];
-
-//     const completion = await openai.chat.completions.create({
-//     model: 'gpt-4o-mini',
-//     messages,
-//     temperature: 0.3,
-//     max_tokens: 1000,
-//     response_format: { type: 'json_object' }
-//     });
-
-//     const jsonText = completion.choices?.[0]?.message?.content || '{}';
-
-//     try {
-//         const result = JSON.parse(jsonText);
-//         return res.json(result);
-//     } catch {
-//         // fallback מינימלי: נחזיר לפחות סיכום משופר
-//         return res.json({
-//             header: { name: "", title: "", email: "", phone: "", location: "" },
-//             summary: raw.slice(0, 1200),
-//             experience: [], skills: [], education: [], languages: [], courses: []
-//         });
-//     }
-//   } catch (err) {
-//     console.error('PDF parse error:', err);
-//     return res.status(500).json({ error: 'Failed to parse PDF' });
-//   }
-// });
-
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => {

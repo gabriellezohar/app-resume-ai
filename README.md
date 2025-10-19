@@ -1,70 +1,71 @@
-# Getting Started with Create React App
+# app-resume-ai
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**AI-powered resume builder** — React frontend + Node/Express backend with OpenAI integration.
 
-## Available Scripts
+**Live Frontend:** [https://app-resume-ai.vercel.app](https://app-resume-ai.vercel.app)  
+**Live API (health):** [https://app-resume-ai.onrender.com/api/ping](https://app-resume-ai.onrender.com/api/ping)
 
-In the project directory, you can run:
 
-### `npm start`
+## Features
+- Generate ATS-friendly resume JSON from user input  
+- Enforces a strict JSON schema (no invented or reordered data)  
+- Optional PDF-to-text parsing (implemented, currently disabled)  
+- Secure CORS configuration for approved origins  
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tech Stack
+- **Frontend:** React (Create React App)  
+- **Backend:** Node.js + Express  
+- **AI:** OpenAI API  
+- **Deployment:** Frontend on **Vercel**, Backend on **Render**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Project Structure
 
-### `npm test`
+/ (React app: src, public, package.json)
+/ server (Express API: index.js, package.json)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## API Endpoints
+- **GET `/api/ping`** — Health check → returns `{ ok: true, time }`  
+- **POST `/api/generate`** — Creates an AI-enhanced resume JSON from the provided input
+Example request:
+curl -X POST https://app-resume-ai.onrender.com/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "mode": "create",
+    "payload": {
+      "fullName": "Gabrielle Zohar",
+      "role": "Full-Stack Developer",
+      "skills": ["React", "Node"],
+      "experiences": [
+        { "role": "Developer", "company": "Dorix", "dates": "2023–2025", "details": "Built core features" }
+      ]
+    }
+  }'
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Local Development
+### Backend
+cd server
+npm install
+npm start
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend
+npm install
+npm start
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Deployment
+### Backend (Render)
+- Root Directory: server
+- Build Command: npm i
+- Start Command: npm start
+- Environment Variables:
+- OPENAI_API_KEY=...
 
-### `npm run eject`
+### Frontend (Vercel)
+- Root Directory: (project root)
+- Build Command: npm run build
+- Output Directory: build
+- Environment Variable:
+- REACT_APP_BACKEND_URL=https://app-resume-ai.onrender.com
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+MIT

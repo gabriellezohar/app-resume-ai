@@ -6,7 +6,15 @@ import OpenAI from 'openai';
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const app = express();
-app.use(cors());
+
+// app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',                
+    'https://app-resume-ai.vercel.app'  
+  ]
+}));
+
 app.use(express.json());
 
 app.use((req, res, next) => {

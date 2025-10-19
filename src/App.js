@@ -138,7 +138,6 @@ function App() {
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const json = await res.json();
 
-      // 4) מציגים את ה-Preview מהתשובה
       setResumeData(json);
     } catch (err) {
       console.error(err);
@@ -408,22 +407,6 @@ function App() {
           </div>
         </section>
       )}
-{/* 
-      <div className="output">
-        {resumeData && (
-        <div className="outputBar">
-          <span>Result</span>
-          <button className="export-pdf" onClick={exportPDF}>Export PDF</button>
-        </div>
-        )}
-         {resumeData ? (
-            <div className="print-area">
-              <ResumePreview data={resumeData} />
-            </div>
-          ) : (
-            <pre className="resultPre">{output}</pre>
-          )}
-      </div> */}
 
     </div>
   );

@@ -119,7 +119,7 @@ html,body{
 }
 .gridRow {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* Role | Company | Dates | Remove */
+  grid-template-columns: 1fr 1fr 1fr; 
   row-gap: 8px;
   column-gap: 10px;
   align-items: start;
@@ -129,7 +129,7 @@ html,body{
   font-family: "Montserrat", sans-serif;
 }
 .gridRow textarea {
-  grid-column: 1 / -1; /* שיפרוס לרוחב כל השורה */
+  grid-column: 1 / -1; 
   font-family: "Montserrat", sans-serif;
 }
 .gridRow button {
@@ -188,34 +188,29 @@ html,body{
   body { background: #fff; }
   .output { border: none; }
 
-  /* הסתרה מוחלטת של כל העמוד */
   body * {
     visibility: hidden !important;
   }
 
-  /* מציגים רק את אזור הקו״ח */
   .print-area, .print-area * {
     visibility: visible !important;
   }
 
-  /* ממקמים את אזור הקו״ח בראש הדף המודפס */
   .print-area {
     position: absolute;
     left: 0;
     top: 0;
-    width: 210mm;        /* רוחב A4 */
-    min-height: 297mm;   /* גובה A4 */
+    width: 210mm;        
+    min-height: 297mm;   
     margin: 0;
     box-sizing: border-box;
   }
 
-  /* אופציונלי: שליטה בשולי הדף המודפס */
   @page {
     size: A4;
-    margin: 0;          /* ביטול שוליים של המדפסת (אנחנו מנהלים padding) */
+    margin: 0;          
   }
 }
-
 
 /* Resume preview */
 .resume {

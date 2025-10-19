@@ -3,6 +3,8 @@ import './App.css';
 import ResumePreview from "./ResumePreview";
 
 function App() {
+  const BASE = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+
   const [tab, setTab] = useState("create"); // 'create' | 'improve'
   const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -126,7 +128,7 @@ function App() {
      try {
       setIsLoading(true);  
       setOutput("");
-      const res = await fetch("http://localhost:3001/api/generate", {
+      const res = await fetch(`${BASE}/api/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
